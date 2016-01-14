@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160114202245) do
+ActiveRecord::Schema.define(version: 20160114211859) do
 
   create_table "documents", force: :cascade do |t|
     t.text     "filename"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20160114202245) do
     t.integer  "document_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "number"
   end
 
   add_index "lines", ["document_id"], name: "index_lines_on_document_id"
