@@ -4,7 +4,6 @@ class LinesController < ApplicationController
   # GET /lines/1
   # GET /lines/1.json
   def show
-    render json: @line
   end
 
   private
