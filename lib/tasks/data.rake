@@ -6,7 +6,8 @@ namespace :data do
     filename = args.filename
 
     # clear file
-    File.new(filename, "w")
+    f = File.new(filename, "w")
+    f.close
 
     open(filename, 'a') do |f|
       lines_count.times do
