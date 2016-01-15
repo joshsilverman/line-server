@@ -12,7 +12,7 @@
 
   Using ActiveRecord, I got O(n) memory usage, and given constrained memory, I saw what looked like exponential time (due to thrashing). Memory scaling linearly with the number of AR objects created is a limitation of ActiveRecord, which retains objects in memory even if you nullify references to them. I considered several options to achieve a more desirable O(k) memory usage and order O(n*log(n)) time: 1) break up file into sub-files and process them in separate jobs. 2) use ActiveRecord connection to create records in a way where memory can be returned.
 
-  I went with option 2, because setting up a job infrastructure for processing each batch from a file seemed to be beyond the scope of this excercise and would add additional complexity. By using sql connection, I was able to add a few lines of code and achieve good performance. Memory is constant in this version because for each line in the file, a query is executed and the memory for the query is returned. Time is O(n*log(n)) because n lines are processed and each insert takes constant time plus log(n) time to update the b-tree for the primary key index.
+  I went with option 2, because setting up a job infrastructure for processing each batch from a file seemed to be beyond the scope of this exercise and would add additional complexity. By using sql connection, I was able to add a few lines of code and achieve good performance. Memory is constant in this version because for each line in the file, a query is executed and the memory for the query is returned. Time is O(n*log(n)) because n lines are processed and each insert takes constant time plus log(n) time to update the b-tree for the primary key index.
 
 * How will your system perform with 100 users? 10000 users? 1000000 users?
 
