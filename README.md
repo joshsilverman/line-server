@@ -6,6 +6,8 @@
 
   I used Rails and two Rake tasks to build the system. The first rake task (`rake data:generate`) creates a sample file with n lines and m words per line and saves the file to the tmp/data folder. The second rake task (`rake preprocessor:preprocess`) finds or creates a Document based on the filename, destroys all lines previously associated with that document (if the document previously existed), and then reads the file line by line creating a new indexed line record in the database (either using raw SQL or active record -- I wrote both options). A lines controller then serves the line as json using a jbuilder file.
 
+  NOTE: I used 1-based indexing so that I could directly map the route argument to the primary keys without adding 1.
+
 * How will your system perform with a 1 GB file? a 10 GB file? a 100 GB file?
 
   Using ActiveRecord, I got O(n) memory usage, and given constrained memory, I saw what looked like exponential time (due to thrashing). Memory scaling linearly with the number of AR objects created is a limitation of ActiveRecord, which retains objects in memory even if you nullify references to them. I considered several options to achieve a more desirable O(k) memory usage and order O(n*log(n)) time: 1) break up file into sub-files and process them in separate jobs. 2) use ActiveRecord connection to create records in a way where memory can be returned.
