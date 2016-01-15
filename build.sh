@@ -9,6 +9,9 @@ bundle
 printf "Running tests...\n\n"
 bundle exec rspec
 
+printf "Reset database...\n\n"
+bundle exec rake db:reset
+
 printf "Generating sample file...\n\n"
 LINE_COUNT=200
 WORDS_PER_LINE=100
