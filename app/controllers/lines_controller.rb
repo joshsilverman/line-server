@@ -8,7 +8,7 @@ class LinesController < ApplicationController
   end
 
   def record_not_found e
-    render json: {error: e}, status: :not_found
+    render json: {error: e.to_s}, status: :not_found
   end
 
   private
