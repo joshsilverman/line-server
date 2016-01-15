@@ -10,5 +10,10 @@ RSpec.describe LinesController, type: :controller do
       get :show, {id: line.to_param, format: :json}, valid_session
       expect(assigns(:line)).to eq(line)
     end
+
+    it "assigns nil if line doesn't exist" do
+      get :show, {id: 123, format: :json}, valid_session
+      expect(assigns(:line)).to eq(nil)
+    end
   end
 end
