@@ -10,7 +10,7 @@ printf "Running tests...\n\n"
 bundle exec rspec
 
 printf "Generating sample file...\n\n"
-LINE_COUNT=10
+LINE_COUNT=2000000
 WORDS_PER_LINE=100
 rake data:generate['tmp/data/sample.txt',$LINE_COUNT,$WORDS_PER_LINE]
 

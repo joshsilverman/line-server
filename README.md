@@ -6,9 +6,14 @@ In this exercise, you will build and document a system that is capable of servin
 ## Questions
 
 * How does your system work? (if not addressed in comments in source)
-.. I used rails and two rake tasks to build the system. The first rake task (`rake data:generate`) creates a sample file with n lines and m words per line and saves the file to the tmp/data folder. The second rake task (`rake preprocessor:preprocess`) finds or creates a Document based on the filename and destroys all lines previously associated with that document, if it previously existed. It then reads the file line by line creating 
+
+.. I used rails and two rake tasks to build the system. The first rake task (`rake data:generate`) creates a sample file with n lines and m words per line and saves the file to the tmp/data folder. The second rake task (`rake preprocessor:preprocess`) finds or creates a Document based on the filename and destroys all lines previously associated with that document, if it previously existed. It then reads the file line by line creating a new line record in the database (either using raw SQL or active record). A lines controller then serves the line as json using a jbuilder file.
 
 * How will your system perform with a 1 GB file? a 10 GB file? a 100 GB file?
+
+.. Using active record, I got O(n) memory usage, and given constrained memory, I saw what looked like exponential time execution. This is a limitation of ActiveRecord, which retains objects in memory even if you nullify references to them. I considered several options to achieve a desired O(k) memory usage and order O(n*log(n)) time: 1) break up file into sub-files and process them in separate jobs. 2) use ActiveRecord connection to create records in a way where references can be dropped.
+
+.. I went with option 2, because setting up a job infrastructure for processing each batch from file being ingested seemed to be beyond the scope of this excercise and would add additional complexity. By using sql connection, I was able to add a few lines of code and achieve good performance. Memory is constant because for each line, the memory for the query executed is recycled. It is O(n*log(n)) because n lines are processed and each insert takes constant time plus log(n) time to update the b-trees which are the default data structures of the indices.
 
 * How will your system perform with 100 users? 10000 users? 1000000 users?
 
