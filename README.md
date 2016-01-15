@@ -10,7 +10,9 @@
 
 * How will your system perform with a 1 GB file? a 10 GB file? a 100 GB file?
 
-  Using ActiveRecord, I got O(n) memory usage, and given constrained memory, I saw what looked like exponential time (due to thrashing). Memory scaling linearly with the number of AR objects created is a limitation of ActiveRecord, which retains objects in memory even if you nullify references to them. I considered several options to achieve a more desirable O(k) memory usage and order O(n*log(n)) time: 1) break up file into sub-files and process them in separate jobs. 2) use ActiveRecord connection to create records in a way where memory can be returned.
+  In all methods I tried, the get line request is O(log(n)) (where n is the number of lines), which reflects the time it takes to traverse the index, which is a b-tree.
+
+  Using ActiveRecord, I got O(n) memory usage for inserts, and given constrained memory, I saw what looked like exponential time (due to thrashing). Memory scaling linearly with the number of AR objects created is a limitation of ActiveRecord, which retains objects in memory even if you nullify references to them. I considered several options to achieve a more desirable O(k) memory usage and order O(n*log(n)) time: 1) break up file into sub-files and process them in separate jobs. 2) use ActiveRecord connection to create records in a way where memory can be returned.
 
   I went with option 2, because setting up a job infrastructure for processing each batch from a file seemed to be beyond the scope of this exercise and would add additional complexity. By using sql connection, I was able to add a few lines of code and achieve good performance. Memory is constant in this version because for each line in the file, a query is executed and the memory for the query is returned. Time is O(n*log(n)) because n lines are processed and each insert takes constant time plus log(n) time to update the b-tree for the primary key index.
 
