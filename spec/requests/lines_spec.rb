@@ -10,9 +10,9 @@ RSpec.describe "Lines", type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it "returns 400 if request invalid" do
+    it "returns 413 if request invalid" do
       get "/lines/123.json"
-      expect(response).to have_http_status(404)
+      expect(response).to have_http_status(413)
     end
   end
 end
