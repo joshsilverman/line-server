@@ -6,6 +6,7 @@ In this exercise, you will build and document a system that is capable of servin
 ## Questions
 
 * How does your system work? (if not addressed in comments in source)
+.. I used rails and two rake tasks to build the system. The first rake task (`rake data:generate`) creates a sample file with n lines and m words per line and saves the file to the tmp/data folder. The second rake task (`rake preprocessor:preprocess`) finds or creates a Document based on the filename and destroys all lines previously associated with that document, if it previously existed. It then reads the file line by line creating 
 
 * How will your system perform with a 1 GB file? a 10 GB file? a 100 GB file?
 
